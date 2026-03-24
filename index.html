@@ -1,1180 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ether Cloud | Magic Login</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700&display=swap');
 
-<!-- ══ PRIMARY SEO ══════════════════════════════════════════════════════ -->
-<title>AstoreT — Intelligent Cloud Storage Powered by AI</title>
-<meta name="description" content="AstoreT is your intelligent cloud storage platform. Upload, organise, and let AI analyse your photos, videos, documents and more — all in one secure place.">
-<meta name="keywords" content="cloud storage, AI storage, photo backup, video storage, file upload, AstoreT, AI file analysis, secure cloud, intelligent storage">
-<meta name="author" content="AstoreT">
-<meta name="robots" content="index, follow">
-<meta name="theme-color" content="#060B18">
-<link rel="canonical" href="https://astoret.app/">
+        :root {
+            --glass: rgba(255, 255, 255, 0.8);
+            --accent: #6366f1;
+            --text-main: #1e293b;
+        }
 
-<!-- ══ OPEN GRAPH / FACEBOOK ════════════════════════════════════════════ -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://astoret.app/">
-<meta property="og:title" content="AstoreT — Intelligent Cloud Storage">
-<meta property="og:description" content="Upload photos, videos, and files. AI analyses your content and keeps everything beautifully organised in the cloud.">
-<meta property="og:image" content="https://astoret.app/og-image.jpg">
-<meta property="og:site_name" content="AstoreT">
-<meta property="og:locale" content="en_US">
+        body {
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+        }
 
-<!-- ══ TWITTER CARD ═════════════════════════════════════════════════════ -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:site" content="@astoret">
-<meta name="twitter:title" content="AstoreT — Intelligent Cloud Storage">
-<meta name="twitter:description" content="Upload photos, videos, and files. AI analyses your content automatically.">
-<meta name="twitter:image" content="https://astoret.app/og-image.jpg">
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 32px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
 
-<!-- ══ SCHEMA.ORG JSON-LD ═══════════════════════════════════════════════ -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "AstoreT",
-  "description": "Intelligent cloud storage platform with AI-powered file analysis",
-  "url": "https://astoret.app",
-  "applicationCategory": "StorageApplication",
-  "operatingSystem": "Web",
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-  "featureList": ["Cloud file storage", "AI image analysis", "Video storage", "Document management", "Google Sign-in"],
-  "author": { "@type": "Organization", "name": "AstoreT" }
-}
-</script>
+        h1 { font-weight: 700; font-size: 1.8rem; letter-spacing: -0.5px; margin-bottom: 8px; }
+        p { color: #64748b; margin-bottom: 24px; font-size: 0.9rem; line-height: 1.5; }
 
-<!-- ══ FONTS ═════════════════════════════════════════════════════════════ -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,400;0,9..144,700;1,9..144,200;1,9..144,400&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+        /* Input Styling */
+        .input-group { margin-bottom: 16px; text-align: left; }
+        input[type="email"] {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input[type="email"]:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
 
-<style>
-/* ══════════════════════════════════════════════════════════════
-   DESIGN SYSTEM — ASTORET
-   Aesthetic: Deep Space Luxury · Iridescent Minimal
-══════════════════════════════════════════════════════════════ */
-:root {
-  --void:      #060B18;
-  --deep:      #0C1427;
-  --surface:   #111A30;
-  --glass:     rgba(255,255,255,0.04);
-  --glass2:    rgba(255,255,255,0.07);
-  --border:    rgba(255,255,255,0.07);
-  --border-lit:rgba(108,99,255,0.45);
-  --violet:    #6C63FF;
-  --cyan:      #00D4FF;
-  --rose:      #FF6B9D;
-  --amber:     #FFB547;
-  --green:     #3DFFA0;
-  --text:      #F0EEF8;
-  --muted:     rgba(240,238,248,0.5);
-  --faint:     rgba(240,238,248,0.18);
-  --grad1: linear-gradient(135deg, #6C63FF, #00D4FF);
-  --grad2: linear-gradient(135deg, #FF6B9D, #FFB547);
-  --shadow-xl: 0 25px 80px rgba(0,0,0,0.7);
-  --shadow-glow: 0 0 40px rgba(108,99,255,0.25);
-  --r: 12px;
-}
-*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
-html { scroll-behavior:smooth; }
-body {
-  font-family:'Syne', sans-serif;
-  background:var(--void);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-  cursor:default;
-}
-/* Custom cursor */
-* { cursor:none !important; }
-#cursor {
-  width:10px; height:10px; border-radius:50%;
-  background:var(--violet); position:fixed; z-index:99999;
-  pointer-events:none; transition:transform .1s ease;
-  mix-blend-mode:screen;
-}
-#cursor-ring {
-  width:32px; height:32px; border-radius:50%;
-  border:1px solid rgba(108,99,255,0.5);
-  position:fixed; z-index:99998; pointer-events:none;
-  transition:all .18s ease; transform:translate(-50%,-50%);
-}
-body:hover #cursor { transform:translate(-50%,-50%) scale(1); }
+        .btn {
+            background: #0f172a;
+            color: white;
+            padding: 14px;
+            border-radius: 14px;
+            border: none;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        .btn:hover { background: #1e293b; transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
 
-/* ══ SCROLLBAR ══════════════════════════════════════════════ */
-::-webkit-scrollbar { width:4px; }
-::-webkit-scrollbar-track { background:var(--deep); }
-::-webkit-scrollbar-thumb { background:rgba(108,99,255,0.4); border-radius:4px; }
+        /* App UI */
+        #app-ui { display: none; }
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            padding: 40px 20px;
+            border-radius: 20px;
+            margin: 20px 0;
+            cursor: pointer;
+            background: rgba(255,255,255,0.4);
+        }
+        .file-item {
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
 
-/* ══ ANIMATED BACKGROUND ════════════════════════════════════ */
-.bg-wrap { position:fixed; inset:0; z-index:0; overflow:hidden; }
-.bg-orb {
-  position:absolute; border-radius:50%; filter:blur(80px);
-  animation:orbDrift 18s ease-in-out infinite alternate;
-}
-.bg-orb:nth-child(1) { width:600px; height:600px; background:radial-gradient(circle, rgba(108,99,255,0.15), transparent 70%); top:-200px; left:-100px; animation-duration:20s; }
-.bg-orb:nth-child(2) { width:500px; height:500px; background:radial-gradient(circle, rgba(0,212,255,0.1), transparent 70%); bottom:-150px; right:-100px; animation-duration:24s; animation-delay:-8s; }
-.bg-orb:nth-child(3) { width:400px; height:400px; background:radial-gradient(circle, rgba(255,107,157,0.08), transparent 70%); top:40%; left:40%; animation-duration:16s; animation-delay:-4s; }
-@keyframes orbDrift { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(60px,40px) scale(1.1)} }
-.bg-grid {
-  position:fixed; inset:0; z-index:0; pointer-events:none;
-  background-image:
-    linear-gradient(rgba(108,99,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(108,99,255,0.04) 1px, transparent 1px);
-  background-size:64px 64px;
-}
-.noise {
-  position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.025;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* ══ LAYOUT ═════════════════════════════════════════════════ */
-#app { position:relative; z-index:2; display:flex; min-height:100vh; }
-#sidebar {
-  width:260px; flex-shrink:0;
-  background:rgba(12,20,39,0.8);
-  backdrop-filter:blur(20px);
-  border-right:1px solid var(--border);
-  display:flex; flex-direction:column;
-  position:fixed; left:0; top:0; bottom:0; z-index:20;
-  transition:transform .3s cubic-bezier(.4,0,.2,1);
-}
-#main { margin-left:260px; flex:1; display:flex; flex-direction:column; min-height:100vh; }
-
-/* ══ LOGO ════════════════════════════════════════════════════ */
-.sidebar-top { padding:28px 22px 20px; border-bottom:1px solid var(--border); }
-.logo-wrap { display:flex; align-items:center; gap:10px; }
-.logo-icon {
-  width:34px; height:34px; border-radius:8px;
-  background:var(--grad1);
-  display:flex; align-items:center; justify-content:center;
-  font-size:16px; box-shadow:0 4px 20px rgba(108,99,255,0.4);
-  position:relative; overflow:hidden;
-}
-.logo-icon::after {
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(135deg, rgba(255,255,255,0.3), transparent);
-}
-.logo-text { font-family:'Fraunces', serif; font-size:22px; font-weight:700; letter-spacing:-.02em; }
-.logo-text span { background:var(--grad1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-.logo-badge {
-  font-family:'JetBrains Mono', monospace; font-size:8px; letter-spacing:.15em;
-  color:var(--violet); background:rgba(108,99,255,0.1); border:1px solid rgba(108,99,255,0.2);
-  padding:2px 7px; border-radius:20px; margin-top:2px; display:inline-block;
-}
-
-/* ══ STORAGE METER ══════════════════════════════════════════ */
-.storage-wrap { padding:18px 22px; border-bottom:1px solid var(--border); }
-.storage-label { font-size:10px; letter-spacing:.12em; color:var(--muted); margin-bottom:10px; font-family:'JetBrains Mono', monospace; }
-.storage-bar { height:4px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden; margin-bottom:7px; }
-.storage-fill { height:100%; background:var(--grad1); border-radius:4px; transition:width .8s cubic-bezier(.4,0,.2,1); width:0%; }
-.storage-nums { display:flex; justify-content:space-between; font-size:10px; color:var(--faint); font-family:'JetBrains Mono', monospace; }
-
-/* ══ NAV ═════════════════════════════════════════════════════ */
-.nav { flex:1; padding:16px 12px; overflow-y:auto; }
-.nav-section-label { font-size:9px; letter-spacing:.15em; color:var(--faint); padding:8px 10px 4px; font-family:'JetBrains Mono', monospace; }
-.nav-item {
-  display:flex; align-items:center; gap:10px;
-  padding:9px 12px; border-radius:8px; cursor:pointer;
-  transition:all .2s ease; font-size:13px; font-weight:500;
-  color:var(--muted); border:1px solid transparent; margin-bottom:2px;
-  position:relative;
-}
-.nav-item:hover { background:var(--glass2); color:var(--text); }
-.nav-item.active { background:rgba(108,99,255,0.1); border-color:rgba(108,99,255,0.2); color:var(--text); }
-.nav-item.active::before {
-  content:''; position:absolute; left:0; top:50%; transform:translateY(-50%);
-  width:3px; height:60%; background:var(--grad1); border-radius:0 3px 3px 0;
-}
-.nav-icon { font-size:15px; width:18px; text-align:center; flex-shrink:0; }
-.nav-count { margin-left:auto; font-size:9px; font-family:'JetBrains Mono', monospace; background:rgba(108,99,255,0.15); color:var(--violet); padding:2px 7px; border-radius:20px; }
-
-/* ══ SIDEBAR FOOTER ═════════════════════════════════════════ */
-.sidebar-footer { padding:14px 22px; border-top:1px solid var(--border); }
-.user-card { display:flex; align-items:center; gap:10px; }
-.user-ava {
-  width:32px; height:32px; border-radius:50%; flex-shrink:0;
-  object-fit:cover; border:1.5px solid rgba(108,99,255,0.3);
-}
-.user-ava-fallback {
-  width:32px; height:32px; border-radius:50%; flex-shrink:0;
-  background:var(--grad1); display:flex; align-items:center; justify-content:center;
-  font-size:12px; font-weight:700; color:#fff;
-}
-.user-info-text { flex:1; overflow:hidden; }
-.user-name-text { font-size:12px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.user-email-text { font-size:10px; color:var(--faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:'JetBrains Mono', monospace; }
-.btn-signout { background:none; border:none; cursor:pointer; padding:5px; border-radius:6px; color:var(--faint); font-size:14px; transition:all .2s; flex-shrink:0; }
-.btn-signout:hover { color:#FF6B6B; background:rgba(255,107,107,0.1); }
-
-/* ══ TOPBAR ═════════════════════════════════════════════════ */
-.topbar {
-  padding:16px 32px; background:rgba(6,11,24,0.7);
-  backdrop-filter:blur(16px); border-bottom:1px solid var(--border);
-  display:flex; align-items:center; gap:14px; position:sticky; top:0; z-index:10;
-}
-.topbar-title { font-family:'Fraunces', serif; font-size:20px; font-weight:400; flex:1; }
-.topbar-title span { color:var(--muted); font-style:italic; font-size:14px; margin-left:8px; }
-.btn-upload-top {
-  padding:9px 20px; background:var(--grad1); border:none; border-radius:8px;
-  color:#fff; font-family:'Syne', sans-serif; font-size:12px; font-weight:600;
-  letter-spacing:.04em; cursor:pointer; transition:all .25s ease;
-  box-shadow:0 4px 20px rgba(108,99,255,0.3); display:flex; align-items:center; gap:7px;
-}
-.btn-upload-top:hover { transform:translateY(-1px); box-shadow:0 8px 30px rgba(108,99,255,0.45); }
-.btn-settings {
-  width:36px; height:36px; border-radius:8px; background:var(--glass);
-  border:1px solid var(--border); cursor:pointer; display:flex; align-items:center;
-  justify-content:center; font-size:15px; color:var(--muted); transition:all .2s;
-}
-.btn-settings:hover { border-color:var(--border-lit); color:var(--text); background:var(--glass2); }
-
-/* ══ CONTENT ════════════════════════════════════════════════ */
-.content { flex:1; padding:28px 32px; }
-
-/* ══ STATS ROW ══════════════════════════════════════════════ */
-.stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
-.stat-card {
-  background:var(--glass); border:1px solid var(--border); border-radius:var(--r);
-  padding:18px 20px; position:relative; overflow:hidden;
-  transition:all .3s ease; cursor:default;
-}
-.stat-card:hover { border-color:rgba(108,99,255,0.25); transform:translateY(-2px); box-shadow:var(--shadow-glow); }
-.stat-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  border-radius:var(--r) var(--r) 0 0;
-}
-.stat-card:nth-child(1)::before { background:var(--grad1); }
-.stat-card:nth-child(2)::before { background:var(--grad2); }
-.stat-card:nth-child(3)::before { background:linear-gradient(90deg, var(--green), var(--cyan)); }
-.stat-card:nth-child(4)::before { background:linear-gradient(90deg, var(--amber), var(--rose)); }
-.stat-icon { font-size:22px; margin-bottom:10px; }
-.stat-value { font-family:'Fraunces', serif; font-size:28px; font-weight:700; line-height:1; margin-bottom:4px; }
-.stat-label { font-size:11px; color:var(--muted); letter-spacing:.06em; font-family:'JetBrains Mono', monospace; }
-
-/* ══ UPLOAD ZONE ════════════════════════════════════════════ */
-.upload-zone {
-  border:2px dashed rgba(108,99,255,0.25); border-radius:var(--r);
-  padding:40px 32px; text-align:center; margin-bottom:28px;
-  background:rgba(108,99,255,0.03); transition:all .3s ease; cursor:pointer;
-  position:relative; overflow:hidden;
-}
-.upload-zone::before {
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(135deg, rgba(108,99,255,0.05) 0%, rgba(0,212,255,0.05) 100%);
-  opacity:0; transition:opacity .3s;
-}
-.upload-zone:hover, .upload-zone.drag-over { border-color:rgba(108,99,255,0.6); }
-.upload-zone:hover::before, .upload-zone.drag-over::before { opacity:1; }
-.upload-zone.drag-over { transform:scale(1.01); box-shadow:0 0 40px rgba(108,99,255,0.2); }
-.upload-icon {
-  width:60px; height:60px; border-radius:50%; margin:0 auto 14px;
-  background:rgba(108,99,255,0.1); border:1px solid rgba(108,99,255,0.2);
-  display:flex; align-items:center; justify-content:center; font-size:24px;
-  transition:transform .3s ease;
-}
-.upload-zone:hover .upload-icon { transform:scale(1.1) translateY(-3px); }
-.upload-title { font-family:'Fraunces', serif; font-size:20px; font-weight:400; margin-bottom:6px; }
-.upload-sub { font-size:12px; color:var(--muted); letter-spacing:.04em; font-family:'JetBrains Mono', monospace; }
-.upload-types { display:flex; gap:8px; justify-content:center; margin-top:14px; flex-wrap:wrap; }
-.type-pill {
-  font-size:10px; padding:4px 12px; border-radius:20px; border:1px solid var(--border);
-  color:var(--faint); font-family:'JetBrains Mono', monospace; letter-spacing:.06em;
-}
-.upload-progress { display:none; margin-top:16px; }
-.progress-bar { height:3px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden; }
-.progress-fill { height:100%; background:var(--grad1); border-radius:3px; width:0%; transition:width .3s ease; }
-.progress-text { font-size:11px; color:var(--muted); margin-top:6px; font-family:'JetBrains Mono', monospace; letter-spacing:.04em; }
-#file-input { display:none; }
-
-/* ══ FILE GRID CONTROLS ═════════════════════════════════════ */
-.grid-controls { display:flex; align-items:center; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
-.grid-controls-left { flex:1; display:flex; align-items:center; gap:10px; }
-.section-heading { font-family:'Fraunces', serif; font-size:18px; font-weight:400; }
-.filter-pills { display:flex; gap:6px; flex-wrap:wrap; }
-.filter-pill {
-  padding:5px 14px; border-radius:20px; border:1px solid var(--border);
-  font-size:11px; color:var(--muted); cursor:pointer; transition:all .2s;
-  font-family:'JetBrains Mono', monospace; letter-spacing:.06em; background:transparent;
-}
-.filter-pill:hover { border-color:rgba(108,99,255,0.4); color:var(--text); }
-.filter-pill.active { background:rgba(108,99,255,0.15); border-color:rgba(108,99,255,0.4); color:var(--violet); }
-.view-btns { display:flex; gap:4px; }
-.view-btn {
-  width:30px; height:30px; border-radius:6px; background:var(--glass);
-  border:1px solid var(--border); cursor:pointer; display:flex;
-  align-items:center; justify-content:center; font-size:13px; color:var(--muted);
-  transition:all .2s;
-}
-.view-btn.active { background:rgba(108,99,255,0.15); border-color:rgba(108,99,255,0.3); color:var(--violet); }
-
-/* ══ FILE GRID ══════════════════════════════════════════════ */
-#files-grid {
-  display:grid; grid-template-columns:repeat(auto-fill, minmax(190px, 1fr)); gap:14px;
-}
-#files-grid.list-view { grid-template-columns:1fr; gap:6px; }
-
-.file-card {
-  background:var(--glass); border:1px solid var(--border); border-radius:var(--r);
-  overflow:hidden; cursor:pointer; transition:all .3s ease;
-  animation:cardIn .4s cubic-bezier(.4,0,.2,1) forwards;
-  opacity:0; transform:translateY(12px);
-}
-@keyframes cardIn { to{opacity:1;transform:translateY(0)} }
-.file-card:hover { border-color:rgba(108,99,255,0.35); transform:translateY(-3px); box-shadow:0 12px 40px rgba(0,0,0,0.4); }
-.file-thumb {
-  width:100%; aspect-ratio:16/10; overflow:hidden;
-  background:linear-gradient(135deg, var(--deep), var(--surface));
-  display:flex; align-items:center; justify-content:center; position:relative;
-}
-.file-thumb img, .file-thumb video {
-  width:100%; height:100%; object-fit:cover;
-}
-.file-type-icon { font-size:32px; opacity:.5; }
-.file-thumb-overlay {
-  position:absolute; inset:0; background:rgba(0,0,0,0.4);
-  display:flex; align-items:center; justify-content:center;
-  opacity:0; transition:opacity .2s;
-}
-.file-card:hover .file-thumb-overlay { opacity:1; }
-.play-btn { width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.15); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; font-size:16px; }
-.file-info { padding:12px 14px; }
-.file-name { font-size:12px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:4px; }
-.file-meta { display:flex; justify-content:space-between; font-size:10px; color:var(--faint); font-family:'JetBrains Mono', monospace; }
-.file-tag {
-  display:inline-block; font-size:9px; padding:2px 8px; border-radius:20px;
-  font-family:'JetBrains Mono', monospace; letter-spacing:.06em; font-weight:500; margin-bottom:6px;
-}
-.tag-image  { background:rgba(108,99,255,0.15); color:var(--violet); }
-.tag-video  { background:rgba(0,212,255,0.12); color:var(--cyan); }
-.tag-audio  { background:rgba(255,107,157,0.12); color:var(--rose); }
-.tag-doc    { background:rgba(255,181,71,0.12); color:var(--amber); }
-.tag-other  { background:rgba(61,255,160,0.1); color:var(--green); }
-.file-actions { display:flex; gap:6px; margin-top:8px; }
-.file-action {
-  flex:1; padding:5px; font-size:10px; font-family:'JetBrains Mono', monospace;
-  background:var(--glass); border:1px solid var(--border); border-radius:5px;
-  cursor:pointer; color:var(--muted); transition:all .2s; letter-spacing:.04em;
-  text-align:center;
-}
-.file-action:hover { border-color:rgba(108,99,255,0.4); color:var(--text); }
-.file-action.del:hover { border-color:rgba(255,107,107,0.4); color:#FF6B6B; background:rgba(255,107,107,0.08); }
-
-/* LIST VIEW CARD */
-#files-grid.list-view .file-card { display:flex; align-items:center; gap:14px; }
-#files-grid.list-view .file-thumb { width:56px; height:56px; aspect-ratio:1; flex-shrink:0; border-radius:8px; }
-#files-grid.list-view .file-info { flex:1; display:flex; align-items:center; gap:10px; padding:10px 14px 10px 0; }
-#files-grid.list-view .file-name { flex:1; margin-bottom:0; }
-#files-grid.list-view .file-meta { flex-direction:row; gap:20px; }
-#files-grid.list-view .file-type-icon { font-size:20px; }
-
-/* ══ EMPTY STATE ════════════════════════════════════════════ */
-.empty-files {
-  grid-column:1/-1; padding:60px 20px; text-align:center;
-}
-.empty-illustration { font-size:48px; margin-bottom:16px; opacity:.3; }
-.empty-title { font-family:'Fraunces', serif; font-size:22px; font-weight:300; font-style:italic; margin-bottom:8px; color:var(--muted); }
-.empty-sub { font-size:12px; color:var(--faint); font-family:'JetBrains Mono', monospace; letter-spacing:.06em; }
-
-/* ══ AUTH SCREEN ════════════════════════════════════════════ */
-#auth-screen {
-  position:fixed; inset:0; z-index:100;
-  display:flex; align-items:center; justify-content:center;
-  background:var(--void); padding:20px;
-}
-.auth-wrap { display:grid; grid-template-columns:1fr 1fr; min-height:500px; width:100%; max-width:860px; gap:0; border-radius:20px; overflow:hidden; box-shadow:var(--shadow-xl); }
-.auth-visual {
-  background:linear-gradient(135deg, #0C1427, #111A30);
-  border:1px solid var(--border); border-right:none; border-radius:20px 0 0 20px;
-  padding:48px 40px; display:flex; flex-direction:column; justify-content:space-between;
-  position:relative; overflow:hidden;
-}
-.auth-visual-orb {
-  position:absolute; width:300px; height:300px; border-radius:50%;
-  background:radial-gradient(circle, rgba(108,99,255,0.2), transparent 70%);
-  bottom:-100px; right:-80px; animation:breathe 4s ease-in-out infinite alternate;
-}
-@keyframes breathe { from{transform:scale(1);opacity:.6} to{transform:scale(1.15);opacity:1} }
-.auth-visual-logo { display:flex; align-items:center; gap:10px; position:relative; z-index:1; }
-.auth-visual-title { font-family:'Fraunces', serif; font-size:38px; font-weight:200; line-height:1.2; position:relative; z-index:1; }
-.auth-visual-title strong { font-weight:700; display:block; background:var(--grad1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-.auth-visual-title em { font-style:italic; color:var(--muted); font-size:20px; }
-.auth-features { position:relative; z-index:1; }
-.auth-feat { display:flex; align-items:center; gap:10px; margin-bottom:12px; font-size:12px; color:var(--muted); font-family:'JetBrains Mono', monospace; }
-.auth-feat-dot { width:6px; height:6px; border-radius:50%; background:var(--grad1); flex-shrink:0; }
-
-.auth-form {
-  background:var(--deep); border:1px solid var(--border); border-radius:0 20px 20px 0;
-  padding:48px 40px; display:flex; flex-direction:column; justify-content:center; gap:0;
-}
-.auth-form-title { font-family:'Fraunces', serif; font-size:28px; font-weight:400; margin-bottom:6px; }
-.auth-form-sub { font-size:12px; color:var(--muted); font-family:'JetBrains Mono', monospace; letter-spacing:.04em; margin-bottom:32px; line-height:1.7; }
-.btn-google-sign {
-  width:100%; padding:14px 20px; background:var(--glass2);
-  border:1px solid var(--border); border-radius:10px;
-  display:flex; align-items:center; justify-content:center; gap:12px;
-  font-family:'Syne', sans-serif; font-size:13px; font-weight:600;
-  color:var(--text); cursor:pointer; transition:all .25s ease; margin-bottom:12px;
-}
-.btn-google-sign:hover { border-color:rgba(108,99,255,0.5); background:rgba(108,99,255,0.08); transform:translateY(-1px); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
-.btn-google-sign svg { width:18px; height:18px; flex-shrink:0; }
-.btn-demo-sign {
-  width:100%; padding:12px 20px; background:transparent;
-  border:1px solid rgba(0,212,255,0.2); border-radius:10px;
-  font-family:'Syne', sans-serif; font-size:12px; font-weight:500;
-  color:var(--cyan); cursor:pointer; transition:all .25s ease;
-  letter-spacing:.04em;
-}
-.btn-demo-sign:hover { background:rgba(0,212,255,0.07); border-color:rgba(0,212,255,0.4); }
-.auth-divider { display:flex; align-items:center; gap:12px; margin:16px 0; }
-.auth-divider-line { flex:1; height:1px; background:var(--border); }
-.auth-divider-text { font-size:10px; color:var(--faint); font-family:'JetBrains Mono', monospace; letter-spacing:.1em; }
-.auth-note { font-size:10px; color:var(--faint); text-align:center; margin-top:16px; font-family:'JetBrains Mono', monospace; line-height:1.8; letter-spacing:.04em; }
-
-/* ══ MODAL ══════════════════════════════════════════════════ */
-.modal-overlay {
-  position:fixed; inset:0; z-index:200;
-  background:rgba(6,11,24,0.9); backdrop-filter:blur(8px);
-  display:flex; align-items:center; justify-content:center; padding:20px;
-}
-.modal {
-  background:var(--deep); border:1px solid var(--border); border-radius:16px;
-  padding:32px; width:100%; max-width:520px; max-height:90vh; overflow-y:auto;
-  box-shadow:var(--shadow-xl); animation:modalIn .3s cubic-bezier(.4,0,.2,1);
-}
-@keyframes modalIn { from{opacity:0;transform:scale(.96)} to{opacity:1;transform:scale(1)} }
-.modal::-webkit-scrollbar { width:3px; }
-.modal-header { display:flex; align-items:start; justify-content:space-between; margin-bottom:20px; }
-.modal-title { font-family:'Fraunces', serif; font-size:22px; font-weight:400; }
-.modal-sub { font-size:11px; color:var(--muted); font-family:'JetBrains Mono', monospace; margin-top:4px; line-height:1.7; }
-.btn-close-modal { background:none; border:none; font-size:18px; color:var(--faint); cursor:pointer; transition:color .2s; padding:2px; }
-.btn-close-modal:hover { color:var(--text); }
-.field { margin-bottom:14px; }
-.field-label { font-size:10px; letter-spacing:.12em; color:var(--muted); margin-bottom:6px; display:block; font-family:'JetBrains Mono', monospace; }
-.field-input {
-  width:100%; padding:11px 14px; background:var(--surface); border:1px solid var(--border);
-  border-radius:8px; color:var(--text); font-family:'JetBrains Mono', monospace;
-  font-size:12px; outline:none; transition:border-color .2s; letter-spacing:.02em;
-}
-.field-input:focus { border-color:rgba(108,99,255,0.5); }
-.field-input::placeholder { color:var(--faint); }
-.modal-info { background:rgba(0,212,255,0.06); border:1px solid rgba(0,212,255,0.15); border-radius:8px; padding:14px 16px; margin-bottom:20px; font-size:11px; color:rgba(0,212,255,0.75); line-height:1.8; font-family:'JetBrains Mono', monospace; letter-spacing:.03em; }
-.modal-actions { display:flex; gap:10px; margin-top:20px; }
-.btn-prim { flex:1; padding:12px; background:var(--grad1); border:none; border-radius:8px; color:#fff; font-family:'Syne', sans-serif; font-size:12px; font-weight:700; letter-spacing:.06em; cursor:pointer; transition:all .2s; }
-.btn-prim:hover { opacity:.9; transform:translateY(-1px); }
-.btn-sec { padding:12px 20px; background:transparent; border:1px solid var(--border); border-radius:8px; color:var(--muted); font-family:'Syne', sans-serif; font-size:12px; font-weight:600; cursor:pointer; transition:all .2s; }
-.btn-sec:hover { border-color:var(--border-lit); color:var(--text); }
-
-/* ══ AI ANALYSIS MODAL ══════════════════════════════════════ */
-.ai-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(108,99,255,0.1); border:1px solid rgba(108,99,255,0.25); padding:4px 12px; border-radius:20px; font-size:10px; color:var(--violet); font-family:'JetBrains Mono', monospace; letter-spacing:.08em; margin-bottom:14px; }
-.ai-pulse { width:6px; height:6px; background:var(--violet); border-radius:50%; animation:pulse 1.5s ease-in-out infinite; }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
-.preview-img { width:100%; max-height:300px; object-fit:contain; border-radius:8px; background:var(--surface); margin-bottom:16px; }
-.preview-video { width:100%; border-radius:8px; background:#000; margin-bottom:16px; }
-.analysis-box { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:16px; font-size:12px; line-height:1.8; color:var(--muted); font-family:'JetBrains Mono', monospace; white-space:pre-wrap; min-height:80px; }
-.analysis-streaming { border-color:rgba(108,99,255,0.3); }
-.file-preview-meta { display:flex; gap:16px; margin-bottom:16px; flex-wrap:wrap; }
-.meta-item { font-size:10px; color:var(--faint); font-family:'JetBrains Mono', monospace; }
-.meta-item strong { color:var(--muted); display:block; margin-bottom:2px; }
-
-/* ══ TOAST ══════════════════════════════════════════════════ */
-#toast-container { position:fixed; bottom:24px; right:24px; z-index:999; display:flex; flex-direction:column; gap:8px; }
-.toast {
-  padding:12px 18px; border-radius:10px; font-size:12px; font-family:'JetBrains Mono', monospace;
-  letter-spacing:.04em; border:1px solid; max-width:320px; animation:toastIn .3s ease;
-  display:flex; align-items:center; gap:8px;
-}
-@keyframes toastIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
-.toast.success { background:rgba(61,255,160,0.08); border-color:rgba(61,255,160,0.25); color:var(--green); }
-.toast.error   { background:rgba(255,107,107,0.08); border-color:rgba(255,107,107,0.25); color:#FF8A8A; }
-.toast.info    { background:rgba(108,99,255,0.1);   border-color:rgba(108,99,255,0.3);   color:var(--violet); }
-.toast.upload  { background:rgba(0,212,255,0.08);   border-color:rgba(0,212,255,0.25);   color:var(--cyan); }
-
-/* ══ RESPONSIVE ═════════════════════════════════════════════ */
-@media(max-width:1100px) { .stats-row { grid-template-columns:repeat(2,1fr); } }
-@media(max-width:700px) {
-  #sidebar { transform:translateX(-100%); }
-  #sidebar.open { transform:translateX(0); box-shadow:var(--shadow-xl); }
-  #main { margin-left:0; }
-  .content { padding:18px 16px; }
-  .topbar { padding:12px 16px; }
-  .auth-wrap { grid-template-columns:1fr; }
-  .auth-visual { display:none; }
-  .auth-form { border-radius:20px; }
-  .stats-row { grid-template-columns:repeat(2,1fr); }
-  #files-grid { grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); }
-}
-.hidden { display:none !important; }
-</style>
+        .status-msg { font-size: 0.85rem; margin-top: 12px; font-weight: 500; }
+        .hidden { display: none; }
+    </style>
 </head>
 <body>
 
-<!-- Cursor -->
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
-
-<!-- Background -->
-<div class="bg-wrap">
-  <div class="bg-orb"></div><div class="bg-orb"></div><div class="bg-orb"></div>
-</div>
-<div class="bg-grid"></div>
-<div class="noise"></div>
-
-<!-- ══ AUTH SCREEN ══════════════════════════════════════════ -->
-<div id="auth-screen">
-  <div class="auth-wrap">
-    <div class="auth-visual">
-      <div class="auth-visual-orb"></div>
-      <div class="auth-visual-logo">
-        <div class="logo-icon">☁</div>
-        <span style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;">AstoreT</span>
-      </div>
-      <div class="auth-visual-title">
-        Store anything.<br>
-        <strong>Intelligently.</strong>
-        <em>Beautifully.</em>
-      </div>
-      <div class="auth-features">
-        <div class="auth-feat"><div class="auth-feat-dot"></div>Upload photos, videos & documents</div>
-        <div class="auth-feat"><div class="auth-feat-dot"></div>AI-powered file analysis with Claude</div>
-        <div class="auth-feat"><div class="auth-feat-dot"></div>Sync across devices via Firebase</div>
-        <div class="auth-feat"><div class="auth-feat-dot"></div>Beautiful, fast & secure</div>
-      </div>
-    </div>
-    <div class="auth-form">
-      <div class="auth-form-title">Welcome back.</div>
-      <div class="auth-form-sub">Sign in to access your intelligent cloud storage.</div>
-      <button class="btn-google-sign" id="btn-google">
-        <svg viewBox="0 0 48 48"><path d="M43.6 20.1H42V20H24v8h11.3a12 12 0 0 1-22.9-4 12 12 0 0 1 19-9.7l5.7-5.6A20 20 0 0 0 4 24a20 20 0 0 0 36.6 11.1L35 29.5A12 12 0 0 1 12 24H4A20 20 0 0 0 24 44a20 20 0 0 0 20-20c0-1.3-.1-2.7-.4-3.9z" fill="#FFC107"/><path d="M6.3 14.7 13 20a12 12 0 0 1 18.4-4.4l5.7-5.6A20 20 0 0 0 6.3 14.7z" fill="#FF3D00"/><path d="M24 44a20 20 0 0 0 13.4-5.2l-6.2-5.2A12 12 0 0 1 12.7 28.1l-6.5 5A20 20 0 0 0 24 44z" fill="#4CAF50"/><path d="M43.6 20.1H42V20H24v8h11.3a12 12 0 0 1-4.1 5.6l6.2 5.2C37 38.5 44 33 44 24c0-1.3-.1-2.7-.4-3.9z" fill="#1976D2"/></svg>
-        Continue with Google
-      </button>
-      <div class="auth-divider"><div class="auth-divider-line"></div><div class="auth-divider-text">OR</div><div class="auth-divider-line"></div></div>
-      <button class="btn-demo-sign" id="btn-demo">⚡ Explore in Demo Mode</button>
-      <div class="auth-note">By continuing you agree to AstoreT's Terms of Service.<br>Your files are encrypted and stored securely in Firebase.</div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ FIREBASE CONFIG MODAL ════════════════════════════════ -->
-<div class="modal-overlay hidden" id="config-modal">
-  <div class="modal">
-    <div class="modal-header">
-      <div>
-        <div class="modal-title">Firebase Config</div>
-        <div class="modal-sub">Connect your Firebase project for auth + storage</div>
-      </div>
-      <button class="btn-close-modal" id="config-close">✕</button>
-    </div>
-    <div class="modal-info">
-      ☁ Get config from Firebase Console → Project Settings → Web app.<br>
-      Enable <strong>Authentication</strong> (Google), <strong>Firestore</strong>, and <strong>Storage</strong> in your project.
-    </div>
-    <div class="field"><label class="field-label">API KEY</label><input class="field-input" id="f-apikey" placeholder="AIzaSy..."></div>
-    <div class="field"><label class="field-label">AUTH DOMAIN</label><input class="field-input" id="f-domain" placeholder="project.firebaseapp.com"></div>
-    <div class="field"><label class="field-label">PROJECT ID</label><input class="field-input" id="f-project" placeholder="my-project"></div>
-    <div class="field"><label class="field-label">STORAGE BUCKET</label><input class="field-input" id="f-bucket" placeholder="project.appspot.com"></div>
-    <div class="field"><label class="field-label">MESSAGING SENDER ID</label><input class="field-input" id="f-sender" placeholder="123456789"></div>
-    <div class="field"><label class="field-label">APP ID</label><input class="field-input" id="f-appid" placeholder="1:...:web:..."></div>
-    <div class="modal-actions">
-      <button class="btn-prim" id="config-save">SAVE & CONNECT</button>
-      <button class="btn-sec" id="config-cancel">CANCEL</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══ FILE PREVIEW MODAL ════════════════════════════════════ -->
-<div class="modal-overlay hidden" id="preview-modal">
-  <div class="modal" style="max-width:600px;">
-    <div class="modal-header">
-      <div>
-        <div class="modal-title" id="preview-title">File Preview</div>
-        <div id="preview-file-tag"></div>
-      </div>
-      <button class="btn-close-modal" id="preview-close">✕</button>
-    </div>
-    <div id="preview-content"></div>
-    <div class="file-preview-meta" id="preview-meta"></div>
-    <div class="ai-badge"><div class="ai-pulse"></div> AI ANALYSIS</div>
-    <div class="analysis-box" id="analysis-text">Click "Analyse with AI" to get an intelligent description of this file.</div>
-    <div class="modal-actions">
-      <button class="btn-prim" id="btn-analyse">✦ Analyse with AI</button>
-      <a class="btn-sec" id="btn-download" style="display:flex;align-items:center;justify-content:center;text-decoration:none;" download>↓ Download</a>
-      <button class="btn-sec" id="btn-delete-preview" style="color:#FF8A8A;border-color:rgba(255,107,107,0.3);">Delete</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══ MAIN APP ═══════════════════════════════════════════════ -->
-<div id="app" class="hidden">
-  <!-- SIDEBAR -->
-  <nav id="sidebar" aria-label="Main navigation">
-    <div class="sidebar-top">
-      <div class="logo-wrap">
-        <div class="logo-icon">☁</div>
-        <div>
-          <div class="logo-text">Astore<span>T</span></div>
-          <div class="logo-badge">AI POWERED</div>
+    <div class="glass-card">
+        <div id="auth-ui">
+            <h1>Ether Cloud</h1>
+            <p>Enter your email. We'll send a magic link to your inbox—no password required.</p>
+            
+            <div class="input-group">
+                <input type="email" id="email" placeholder="name@example.com">
+            </div>
+            <button class="btn" id="magicLinkBtn" onclick="sendMagicLink()">Send Magic Link</button>
+            <div id="authStatus" class="status-msg"></div>
         </div>
-      </div>
+
+        <div id="app-ui">
+            <h1>Welcome back</h1>
+            <p id="user-display" style="margin-bottom: 10px; font-weight: 600;"></p>
+            
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <span id="upload-status">Drop file or click to upload</span>
+                <input type="file" id="fileInput" class="hidden" onchange="uploadFile(event)">
+            </div>
+
+            <div id="file-list"></div>
+            
+            <button class="btn" style="background:none; color:#ef4444; margin-top:20px; border: 1px solid #fee2e2" onclick="signOut()">Log Out</button>
+        </div>
     </div>
 
-    <div class="storage-wrap">
-      <div class="storage-label">STORAGE USED</div>
-      <div class="storage-bar"><div class="storage-fill" id="storage-fill"></div></div>
-      <div class="storage-nums"><span id="storage-used">0 MB</span><span id="storage-total">5 GB</span></div>
-    </div>
+    <script>
+        // REPLACE THESE WITH YOUR KEYS FROM SUPABASE SETTINGS > API
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    <div class="nav" id="sidebar-nav">
-      <div class="nav-section-label">LIBRARY</div>
-      <div class="nav-item active" data-filter="all"><span class="nav-icon">⊞</span> All Files <span class="nav-count" id="count-all">0</span></div>
-      <div class="nav-item" data-filter="image"><span class="nav-icon">🖼</span> Images <span class="nav-count" id="count-image">0</span></div>
-      <div class="nav-item" data-filter="video"><span class="nav-icon">🎬</span> Videos <span class="nav-count" id="count-video">0</span></div>
-      <div class="nav-item" data-filter="audio"><span class="nav-icon">🎵</span> Audio <span class="nav-count" id="count-audio">0</span></div>
-      <div class="nav-item" data-filter="doc"><span class="nav-icon">📄</span> Documents <span class="nav-count" id="count-doc">0</span></div>
-      <div class="nav-section-label" style="margin-top:8px;">TOOLS</div>
-      <div class="nav-item" id="nav-config"><span class="nav-icon">⚙</span> Firebase Config</div>
-    </div>
+        // --- MAGIC LINK LOGIC ---
+        async function sendMagicLink() {
+            const email = document.getElementById('email').value;
+            const btn = document.getElementById('magicLinkBtn');
+            const status = document.getElementById('authStatus');
 
-    <div class="sidebar-footer">
-      <div class="user-card">
-        <div id="user-avatar-slot"></div>
-        <div class="user-info-text">
-          <div class="user-name-text" id="user-display-name">Demo</div>
-          <div class="user-email-text" id="user-display-email">demo@astoret.app</div>
-        </div>
-        <button class="btn-signout" id="btn-signout" title="Sign out">⏻</button>
-      </div>
-    </div>
-  </nav>
+            if (!email) return alert("Please enter your email");
 
-  <!-- MAIN CONTENT -->
-  <main id="main" role="main">
-    <header class="topbar">
-      <h1 class="topbar-title" id="page-heading">All Files <span id="topbar-sub">your cloud library</span></h1>
-      <label class="btn-upload-top" for="file-input" title="Upload files">
-        ↑ Upload Files
-      </label>
-      <button class="btn-settings" id="btn-open-config" title="Firebase Settings" aria-label="Settings">⚙</button>
-      <input type="file" id="file-input" multiple accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt,.ppt,.pptx,.xls,.xlsx">
-    </header>
+            btn.disabled = true;
+            btn.innerText = "Sending...";
 
-    <div class="content">
-      <!-- STATS -->
-      <section class="stats-row" aria-label="Storage statistics">
-        <div class="stat-card"><div class="stat-icon">📁</div><div class="stat-value" id="stat-total">0</div><div class="stat-label">TOTAL FILES</div></div>
-        <div class="stat-card"><div class="stat-icon">🖼</div><div class="stat-value" id="stat-images">0</div><div class="stat-label">IMAGES</div></div>
-        <div class="stat-card"><div class="stat-icon">🎬</div><div class="stat-value" id="stat-videos">0</div><div class="stat-label">VIDEOS</div></div>
-        <div class="stat-card"><div class="stat-icon">📄</div><div class="stat-value" id="stat-docs">0</div><div class="stat-label">DOCUMENTS</div></div>
-      </section>
+            const { error } = await supabaseClient.auth.signInWithOtp({
+                email: email,
+                options: {
+                    emailRedirectTo: window.location.href, // Sends user back to this exact page
+                },
+            });
 
-      <!-- UPLOAD ZONE -->
-      <section class="upload-zone" id="upload-zone" role="region" aria-label="Upload files">
-        <div class="upload-icon">☁</div>
-        <div class="upload-title">Drop files here to upload</div>
-        <div class="upload-sub">or click anywhere in this box to browse</div>
-        <div class="upload-types">
-          <span class="type-pill">PHOTO</span><span class="type-pill">VIDEO</span>
-          <span class="type-pill">AUDIO</span><span class="type-pill">PDF</span>
-          <span class="type-pill">DOCUMENT</span><span class="type-pill">ANY FILE</span>
-        </div>
-        <div class="upload-progress" id="upload-progress">
-          <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-          <div class="progress-text" id="progress-text">Uploading...</div>
-        </div>
-      </section>
+            if (error) {
+                status.style.color = "#ef4444";
+                status.innerText = error.message;
+                btn.disabled = false;
+                btn.innerText = "Send Magic Link";
+            } else {
+                status.style.color = "#059669";
+                status.innerText = "Check your email for the login link!";
+            }
+        }
 
-      <!-- FILE GRID -->
-      <section>
-        <div class="grid-controls">
-          <div class="grid-controls-left">
-            <h2 class="section-heading" id="filter-heading">All Files</h2>
-          </div>
-          <div class="filter-pills">
-            <button class="filter-pill active" data-f="all">All</button>
-            <button class="filter-pill" data-f="image">Images</button>
-            <button class="filter-pill" data-f="video">Video</button>
-            <button class="filter-pill" data-f="audio">Audio</button>
-            <button class="filter-pill" data-f="doc">Docs</button>
-          </div>
-          <div class="view-btns">
-            <button class="view-btn active" id="grid-view-btn" title="Grid view">⊞</button>
-            <button class="view-btn" id="list-view-btn" title="List view">≡</button>
-          </div>
-        </div>
-        <div id="files-grid" role="list" aria-label="Uploaded files"></div>
-      </section>
-    </div>
-  </main>
-</div>
+        // --- AUTH STATE TRACKER ---
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            if (session) {
+                document.getElementById('auth-ui').style.display = 'none';
+                document.getElementById('app-ui').style.display = 'block';
+                document.getElementById('user-display').innerText = session.user.email;
+                loadFiles();
+            }
+        });
 
-<!-- TOAST CONTAINER -->
-<div id="toast-container" role="status" aria-live="polite"></div>
+        async function signOut() {
+            await supabaseClient.auth.signOut();
+            window.location.reload();
+        }
 
-<script type="module">
-/* ════════════════════════════════════════════════════════════
-   ASTORET — MAIN APPLICATION
-   Firebase Storage + Firestore + Auth + Claude AI
-════════════════════════════════════════════════════════════ */
+        // --- STORAGE LOGIC ---
+        async function uploadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
 
-// ── CURSOR ────────────────────────────────────────────────────
-const cur = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx-5+'px'; cur.style.top=my-5+'px'; });
-function animRing(){ rx+=(mx-rx)*.15; ry+=(my-ry)*.15; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); } animRing();
-document.querySelectorAll('button,a,.nav-item,.file-card,.filter-pill,.suggestion-chip').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{ cur.style.transform='translate(-50%,-50%) scale(2.2)'; ring.style.transform='translate(-50%,-50%) scale(1.4)'; ring.style.borderColor='rgba(108,99,255,0.8)'; });
-  el.addEventListener('mouseleave',()=>{ cur.style.transform='translate(-50%,-50%) scale(1)'; ring.style.transform='translate(-50%,-50%)'; ring.style.borderColor='rgba(108,99,255,0.5)'; });
-});
+            const status = document.getElementById('upload-status');
+            status.innerText = "Uploading...";
 
-// ── STATE ─────────────────────────────────────────────────────
-let FB = null; // firebase modules
-let user = null;
-let demoMode = false;
-let files = []; // {id, name, url, type, size, uploadedAt, storagePath, aiAnalysis}
-let activeFilter = 'all';
-let previewFile = null;
-let isUploading = false;
+            // Uploading to the 'files' bucket
+            const { data, error } = await supabaseClient.storage
+                .from('files')
+                .upload(`${Date.now()}_${file.name}`, file);
 
-// ── FIREBASE LOADER ───────────────────────────────────────────
-async function loadFB(cfg) {
-  const [
-    { initializeApp },
-    { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged },
-    { getFirestore, collection, doc, addDoc, getDocs, deleteDoc, onSnapshot, updateDoc, serverTimestamp, query, orderBy },
-    { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject }
-  ] = await Promise.all([
-    import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js'),
-    import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js'),
-    import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js'),
-    import('https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js')
-  ]);
-  const app = initializeApp(cfg);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const storage = getStorage(app);
-  return { auth, db, storage, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, collection, doc, addDoc, getDocs, deleteDoc, onSnapshot, updateDoc, serverTimestamp, query, orderBy, ref, uploadBytesResumable, getDownloadURL, deleteObject };
-}
+            if (error) {
+                alert("Upload failed: " + error.message);
+                status.innerText = "Drop file or click to upload";
+            } else {
+                status.innerText = "Upload Complete!";
+                setTimeout(() => {
+                    status.innerText = "Drop file or click to upload";
+                    loadFiles();
+                }, 2000);
+            }
+        }
 
-// ── INIT ──────────────────────────────────────────────────────
-const saved = localStorage.getItem('astoret_fb_cfg');
-if (saved) {
-  try {
-    FB = await loadFB(JSON.parse(saved));
-    FB.onAuthStateChanged(FB.auth, u => { if(u){ user=u; enterApp(); } });
-  } catch(e) { console.warn('Firebase init failed:', e); }
-}
-prefillConfig();
+        async function loadFiles() {
+            const listContainer = document.getElementById('file-list');
+            listContainer.innerHTML = '<p style="font-size:0.8rem">Loading files...</p>';
 
-// ── AUTH ──────────────────────────────────────────────────────
-document.getElementById('btn-google').addEventListener('click', async () => {
-  if (!FB) { openConfig(); toast('Set up Firebase first!', 'info'); return; }
-  try {
-    await FB.signInWithPopup(FB.auth, new FB.GoogleAuthProvider());
-  } catch(e) { toast('Sign-in failed: ' + e.message, 'error'); }
-});
-document.getElementById('btn-demo').addEventListener('click', () => {
-  demoMode = true; user = null;
-  enterApp(); toast('Demo mode — uploads won\'t be saved', 'info');
-});
-document.getElementById('btn-signout').addEventListener('click', async () => {
-  if (demoMode) { location.reload(); return; }
-  if (FB) { await FB.signOut(FB.auth); location.reload(); }
-});
+            const { data, error } = await supabaseClient.storage.from('files').list('', {
+                limit: 10,
+                offset: 0,
+                sortBy: { column: 'created_at', order: 'desc' },
+            });
 
-function enterApp() {
-  document.getElementById('auth-screen').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
-  // User info
-  if (user) {
-    document.getElementById('user-avatar-slot').innerHTML = user.photoURL
-      ? `<img class="user-ava" src="${user.photoURL}" alt="${user.displayName}">`
-      : `<div class="user-ava-fallback">${(user.displayName||'U')[0]}</div>`;
-    document.getElementById('user-display-name').textContent = user.displayName || 'User';
-    document.getElementById('user-display-email').textContent = user.email || '';
-    listenFiles();
-  } else {
-    document.getElementById('user-avatar-slot').innerHTML = `<div class="user-ava-fallback">D</div>`;
-    document.getElementById('user-display-name').textContent = 'Demo Mode';
-    document.getElementById('user-display-email').textContent = 'demo@astoret.app';
-    renderFiles();
-  }
-}
-
-// ── FIRESTORE LISTENER ────────────────────────────────────────
-function listenFiles() {
-  if (!FB || !user) return;
-  const q = FB.query(FB.collection(FB.db, 'users', user.uid, 'files'), FB.orderBy('uploadedAt', 'desc'));
-  FB.onSnapshot(q, snap => {
-    files = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    renderFiles();
-    updateStats();
-  });
-}
-
-// ── UPLOAD ────────────────────────────────────────────────────
-document.getElementById('file-input').addEventListener('change', e => handleFiles(e.target.files));
-document.getElementById('upload-zone').addEventListener('click', () => document.getElementById('file-input').click());
-
-const zone = document.getElementById('upload-zone');
-['dragover','dragenter'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.add('drag-over'); }));
-['dragleave','drop'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.remove('drag-over'); }));
-zone.addEventListener('drop', e => handleFiles(e.dataTransfer.files));
-
-async function handleFiles(fileList) {
-  if (!fileList.length) return;
-  for (const file of Array.from(fileList)) {
-    await uploadFile(file);
-  }
-}
-
-async function uploadFile(file) {
-  if (isUploading) return;
-  isUploading = true;
-  const progEl = document.getElementById('upload-progress');
-  const fillEl = document.getElementById('progress-fill');
-  const textEl = document.getElementById('progress-text');
-  progEl.style.display = 'block'; fillEl.style.width = '0%';
-  textEl.textContent = `Uploading ${file.name}…`;
-
-  if (demoMode || !FB || !user) {
-    // Demo: use local ObjectURL
-    const url = URL.createObjectURL(file);
-    const fileObj = { id:'demo_'+Date.now(), name:file.name, url, type:getFileType(file), size:file.size, uploadedAt:Date.now(), storagePath:null, aiAnalysis:'' };
-    files.unshift(fileObj);
-    simulateProgress(fillEl, textEl, () => {
-      progEl.style.display = 'none'; isUploading = false;
-      renderFiles(); updateStats();
-      toast(`${file.name} uploaded!`, 'upload');
-    });
-    return;
-  }
-
-  try {
-    const path = `users/${user.uid}/files/${Date.now()}_${file.name}`;
-    const storageRef = FB.ref(FB.storage, path);
-    const task = FB.uploadBytesResumable(storageRef, file);
-
-    task.on('state_changed',
-      snap => {
-        const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
-        fillEl.style.width = pct + '%';
-        textEl.textContent = `Uploading ${file.name} — ${pct}%`;
-      },
-      err => { toast('Upload error: ' + err.message, 'error'); progEl.style.display='none'; isUploading=false; },
-      async () => {
-        const url = await FB.getDownloadURL(task.snapshot.ref);
-        const meta = { name:file.name, url, type:getFileType(file), size:file.size, uploadedAt:FB.serverTimestamp(), storagePath:path, aiAnalysis:'' };
-        await FB.addDoc(FB.collection(FB.db, 'users', user.uid, 'files'), meta);
-        progEl.style.display = 'none'; isUploading = false;
-        toast(`${file.name} uploaded!`, 'upload');
-      }
-    );
-  } catch(e) { toast('Upload failed: ' + e.message, 'error'); progEl.style.display='none'; isUploading=false; }
-}
-
-function simulateProgress(fill, text, done) {
-  let p = 0;
-  const iv = setInterval(() => { p = Math.min(p + Math.random()*15, 100); fill.style.width=p+'%'; if(p>=100){ clearInterval(iv); setTimeout(done,400); } }, 120);
-}
-
-// ── FILE TYPE ─────────────────────────────────────────────────
-function getFileType(file) {
-  if (file.type.startsWith('image/')) return 'image';
-  if (file.type.startsWith('video/')) return 'video';
-  if (file.type.startsWith('audio/')) return 'audio';
-  if (file.type.includes('pdf') || file.type.includes('word') || file.type.includes('document') || file.type.includes('text') || file.type.includes('sheet') || file.type.includes('presentation')) return 'doc';
-  return 'other';
-}
-function typeColor(t) { return {image:'tag-image',video:'tag-video',audio:'tag-audio',doc:'tag-doc',other:'tag-other'}[t]||'tag-other'; }
-function typeEmoji(t) { return {image:'🖼',video:'🎬',audio:'🎵',doc:'📄',other:'📦'}[t]||'📦'; }
-function fmtSize(bytes) {
-  if (!bytes) return '—';
-  if (bytes<1024) return bytes+'B';
-  if (bytes<1048576) return (bytes/1024).toFixed(1)+'KB';
-  if (bytes<1073741824) return (bytes/1048576).toFixed(1)+'MB';
-  return (bytes/1073741824).toFixed(1)+'GB';
-}
-function timeAgo(ts) {
-  const d = ts?.toDate ? ts.toDate() : new Date(ts||Date.now());
-  const diff = (Date.now()-d)/1000;
-  if(diff<60) return 'just now';
-  if(diff<3600) return Math.floor(diff/60)+'m ago';
-  if(diff<86400) return Math.floor(diff/3600)+'h ago';
-  return Math.floor(diff/86400)+'d ago';
-}
-
-// ── RENDER FILES ─────────────────────────────────────────────
-function renderFiles() {
-  const grid = document.getElementById('files-grid');
-  const filtered = activeFilter === 'all' ? files : files.filter(f => f.type === activeFilter);
-  grid.innerHTML = '';
-  if (!filtered.length) {
-    grid.innerHTML = `<div class="empty-files"><div class="empty-illustration">☁</div><div class="empty-title">Nothing here yet…</div><div class="empty-sub">${activeFilter==='all'?'Upload your first file to get started.':'No '+activeFilter+' files found.'}</div></div>`;
-    return;
-  }
-  filtered.forEach((f, i) => {
-    const card = document.createElement('div');
-    card.className = 'file-card';
-    card.style.animationDelay = (i*40)+'ms';
-    card.setAttribute('role','listitem');
-    card.setAttribute('aria-label', f.name);
-    const thumb = buildThumb(f);
-    card.innerHTML = `
-      ${thumb}
-      <div class="file-info">
-        <div class="${typeColor(f.type)} file-tag">${f.type?.toUpperCase()}</div>
-        <div class="file-name" title="${escH(f.name)}">${escH(f.name)}</div>
-        <div class="file-meta"><span>${fmtSize(f.size)}</span><span>${timeAgo(f.uploadedAt)}</span></div>
-        <div class="file-actions">
-          <div class="file-action" data-id="${f.id}" data-action="preview">Preview</div>
-          <div class="file-action del" data-id="${f.id}" data-action="delete">Delete</div>
-        </div>
-      </div>`;
-    card.addEventListener('click', e => {
-      const action = e.target.dataset.action;
-      if (action === 'preview') { openPreview(f.id); return; }
-      if (action === 'delete') { deleteFile(f.id); return; }
-      openPreview(f.id);
-    });
-    grid.appendChild(card);
-  });
-}
-
-function buildThumb(f) {
-  if (f.type === 'image') {
-    return `<div class="file-thumb"><img src="${f.url}" alt="${escH(f.name)}" loading="lazy"><div class="file-thumb-overlay"><div class="play-btn">🔍</div></div></div>`;
-  }
-  if (f.type === 'video') {
-    return `<div class="file-thumb"><video src="${f.url}" preload="metadata" muted></video><div class="file-thumb-overlay"><div class="play-btn">▶</div></div></div>`;
-  }
-  return `<div class="file-thumb"><div class="file-type-icon">${typeEmoji(f.type)}</div></div>`;
-}
-
-// ── STATS ─────────────────────────────────────────────────────
-function updateStats() {
-  const counts = { image:0, video:0, audio:0, doc:0, other:0 };
-  let totalBytes = 0;
-  files.forEach(f => { counts[f.type]=(counts[f.type]||0)+1; totalBytes+=(f.size||0); });
-  document.getElementById('stat-total').textContent = files.length;
-  document.getElementById('stat-images').textContent = counts.image;
-  document.getElementById('stat-videos').textContent = counts.video;
-  document.getElementById('stat-docs').textContent = counts.doc;
-  document.getElementById('count-all').textContent = files.length;
-  document.getElementById('count-image').textContent = counts.image;
-  document.getElementById('count-video').textContent = counts.video;
-  document.getElementById('count-audio').textContent = counts.audio;
-  document.getElementById('count-doc').textContent = counts.doc;
-  const gb = 5*1073741824;
-  const pct = Math.min((totalBytes/gb)*100, 100);
-  document.getElementById('storage-fill').style.width = pct+'%';
-  document.getElementById('storage-used').textContent = fmtSize(totalBytes);
-}
-
-// ── FILTER ────────────────────────────────────────────────────
-document.getElementById('sidebar-nav').addEventListener('click', e => {
-  const item = e.target.closest('[data-filter]');
-  if (!item) return;
-  activeFilter = item.dataset.filter;
-  document.querySelectorAll('.nav-item[data-filter]').forEach(n => n.classList.remove('active'));
-  item.classList.add('active');
-  document.querySelectorAll('.filter-pill[data-f]').forEach(p => { p.classList.toggle('active', p.dataset.f===activeFilter); });
-  renderFiles();
-});
-document.querySelectorAll('.filter-pill[data-f]').forEach(p => {
-  p.addEventListener('click', () => {
-    activeFilter = p.dataset.f;
-    document.querySelectorAll('.filter-pill[data-f]').forEach(x => x.classList.remove('active'));
-    p.classList.add('active');
-    document.querySelectorAll('.nav-item[data-filter]').forEach(n => { n.classList.toggle('active', n.dataset.filter===activeFilter); });
-    renderFiles();
-  });
-});
-
-// ── VIEW TOGGLE ───────────────────────────────────────────────
-document.getElementById('grid-view-btn').addEventListener('click', () => {
-  document.getElementById('files-grid').classList.remove('list-view');
-  document.getElementById('grid-view-btn').classList.add('active');
-  document.getElementById('list-view-btn').classList.remove('active');
-});
-document.getElementById('list-view-btn').addEventListener('click', () => {
-  document.getElementById('files-grid').classList.add('list-view');
-  document.getElementById('list-view-btn').classList.add('active');
-  document.getElementById('grid-view-btn').classList.remove('active');
-});
-
-// ── DELETE ────────────────────────────────────────────────────
-async function deleteFile(id) {
-  const f = files.find(x => x.id === id);
-  if (!f) return;
-  if (!confirm(`Delete "${f.name}"? This cannot be undone.`)) return;
-  if (demoMode) {
-    files = files.filter(x => x.id !== id); renderFiles(); updateStats();
-    toast(f.name + ' deleted', 'info'); return;
-  }
-  try {
-    if (FB && user) {
-      await FB.deleteDoc(FB.doc(FB.db, 'users', user.uid, 'files', id));
-      if (f.storagePath) await FB.deleteObject(FB.ref(FB.storage, f.storagePath));
-    }
-    toast(f.name + ' deleted', 'info');
-    closeModal('preview-modal');
-  } catch(e) { toast('Delete failed: ' + e.message, 'error'); }
-}
-
-// ── PREVIEW MODAL ─────────────────────────────────────────────
-function openPreview(id) {
-  previewFile = files.find(f => f.id === id);
-  if (!previewFile) return;
-  const f = previewFile;
-  document.getElementById('preview-title').textContent = f.name;
-  document.getElementById('preview-file-tag').innerHTML = `<span class="${typeColor(f.type)} file-tag">${(f.type||'file').toUpperCase()}</span>`;
-
-  let contentHtml = '';
-  if (f.type === 'image') contentHtml = `<img class="preview-img" src="${f.url}" alt="${escH(f.name)}">`;
-  else if (f.type === 'video') contentHtml = `<video class="preview-video" src="${f.url}" controls></video>`;
-  else if (f.type === 'audio') contentHtml = `<audio controls style="width:100%;margin-bottom:16px;"><source src="${f.url}"></audio>`;
-  else contentHtml = `<div style="text-align:center;padding:40px;font-size:48px;">${typeEmoji(f.type)}</div>`;
-
-  document.getElementById('preview-content').innerHTML = contentHtml;
-  document.getElementById('preview-meta').innerHTML = `
-    <div class="meta-item"><strong>SIZE</strong>${fmtSize(f.size)}</div>
-    <div class="meta-item"><strong>UPLOADED</strong>${timeAgo(f.uploadedAt)}</div>
-    <div class="meta-item"><strong>TYPE</strong>${(f.type||'—').toUpperCase()}</div>`;
-
-  const analysisBox = document.getElementById('analysis-text');
-  analysisBox.textContent = f.aiAnalysis || 'Click "Analyse with AI" to get an intelligent description.';
-  analysisBox.classList.remove('analysis-streaming');
-
-  const dlBtn = document.getElementById('btn-download');
-  dlBtn.href = f.url; dlBtn.download = f.name;
-
-  document.getElementById('btn-delete-preview').onclick = () => deleteFile(f.id);
-  document.getElementById('preview-modal').classList.remove('hidden');
-}
-document.getElementById('preview-close').addEventListener('click', () => closeModal('preview-modal'));
-document.getElementById('preview-modal').addEventListener('click', e => { if(e.target.id==='preview-modal') closeModal('preview-modal'); });
-
-// ── AI ANALYSIS ───────────────────────────────────────────────
-document.getElementById('btn-analyse').addEventListener('click', async () => {
-  if (!previewFile) return;
-  const f = previewFile;
-  const box = document.getElementById('analysis-text');
-  box.textContent = ''; box.classList.add('analysis-streaming');
-  document.getElementById('btn-analyse').disabled = true;
-  document.getElementById('btn-analyse').textContent = '✦ Analysing…';
-
-  let userContent;
-  if (f.type === 'image') {
-    try {
-      const res = await fetch(f.url);
-      const blob = await res.blob();
-      const b64 = await blobToBase64(blob);
-      const mt = blob.type || 'image/jpeg';
-      userContent = [
-        { type:'image', source:{ type:'base64', media_type:mt, data:b64 } },
-        { type:'text', text:'Analyse this image thoroughly. Describe: subject matter, composition, colours, mood, technical quality, and any interesting details. Be insightful and eloquent.' }
-      ];
-    } catch(e) {
-      userContent = [{ type:'text', text:`Analyse a file named "${f.name}" of type image/photo. Describe what you'd expect from the filename and context.` }];
-    }
-  } else {
-    userContent = [{ type:'text', text:`Analyse this file: Name: "${f.name}", Type: ${f.type}, Size: ${fmtSize(f.size)}. Provide helpful insights about what this file likely contains, its purpose, and any relevant recommendations for organising or using it.` }];
-  }
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{ 'Content-Type':'application/json' },
-      body: JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        system:'You are AstoreT\'s intelligent file analyst. You analyse uploaded files and provide concise, insightful descriptions. Be specific, elegant, and useful. Format neatly.',
-        messages:[{ role:'user', content: userContent }]
-      })
-    });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error.message);
-    const analysis = data.content?.[0]?.text || 'No analysis available.';
-    box.textContent = analysis;
-    box.classList.remove('analysis-streaming');
-    previewFile.aiAnalysis = analysis;
-    // Save to Firestore if possible
-    if (FB && user && previewFile.id && !previewFile.id.startsWith('demo_')) {
-      FB.updateDoc(FB.doc(FB.db,'users',user.uid,'files',previewFile.id), { aiAnalysis:analysis }).catch(()=>{});
-    }
-    toast('AI analysis complete!', 'success');
-  } catch(e) {
-    box.textContent = '⚠ Analysis failed: ' + e.message;
-    box.classList.remove('analysis-streaming');
-    toast('AI error: ' + e.message, 'error');
-  }
-  document.getElementById('btn-analyse').disabled = false;
-  document.getElementById('btn-analyse').textContent = '✦ Analyse with AI';
-});
-
-function blobToBase64(blob) {
-  return new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload = () => res(r.result.split(',')[1]);
-    r.onerror = rej;
-    r.readAsDataURL(blob);
-  });
-}
-
-// ── CONFIG MODAL ──────────────────────────────────────────────
-document.getElementById('btn-open-config').addEventListener('click', openConfig);
-document.getElementById('nav-config').addEventListener('click', openConfig);
-document.getElementById('config-close').addEventListener('click', () => closeModal('config-modal'));
-document.getElementById('config-cancel').addEventListener('click', () => closeModal('config-modal'));
-document.getElementById('config-modal').addEventListener('click', e => { if(e.target.id==='config-modal') closeModal('config-modal'); });
-document.getElementById('config-save').addEventListener('click', () => {
-  const cfg = {
-    apiKey:             document.getElementById('f-apikey').value.trim(),
-    authDomain:         document.getElementById('f-domain').value.trim(),
-    projectId:          document.getElementById('f-project').value.trim(),
-    storageBucket:      document.getElementById('f-bucket').value.trim(),
-    messagingSenderId:  document.getElementById('f-sender').value.trim(),
-    appId:              document.getElementById('f-appid').value.trim(),
-  };
-  if (!cfg.apiKey || !cfg.projectId) { toast('API Key and Project ID required', 'error'); return; }
-  localStorage.setItem('astoret_fb_cfg', JSON.stringify(cfg));
-  toast('Saved! Reloading…', 'success');
-  setTimeout(() => location.reload(), 1400);
-});
-function openConfig() { document.getElementById('config-modal').classList.remove('hidden'); }
-
-function prefillConfig() {
-  const c = saved ? JSON.parse(saved) : {};
-  document.getElementById('f-apikey').value   = c.apiKey||'';
-  document.getElementById('f-domain').value   = c.authDomain||'';
-  document.getElementById('f-project').value  = c.projectId||'';
-  document.getElementById('f-bucket').value   = c.storageBucket||'';
-  document.getElementById('f-sender').value   = c.messagingSenderId||'';
-  document.getElementById('f-appid').value    = c.appId||'';
-}
-
-// ── HELPERS ───────────────────────────────────────────────────
-function closeModal(id) {
-  document.getElementById(id).classList.add('hidden');
-  // stop video
-  const v = document.querySelector('#preview-content video');
-  if (v) { v.pause(); v.src = ''; }
-}
-function escH(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-// ── TOAST ─────────────────────────────────────────────────────
-function toast(msg, type='info') {
-  const el = document.createElement('div');
-  el.className = `toast ${type}`;
-  const icons = { success:'✓', error:'✕', info:'ℹ', upload:'↑' };
-  el.innerHTML = `<span>${icons[type]||'•'}</span><span>${msg}</span>`;
-  document.getElementById('toast-container').appendChild(el);
-  setTimeout(() => { el.style.opacity='0'; el.style.transform='translateX(20px)'; el.style.transition='all .3s'; setTimeout(()=>el.remove(),350); }, 3500);
-}
-window._toast = toast;
-</script>
+            if (data) {
+                listContainer.innerHTML = '';
+                data.forEach(file => {
+                    const { data: urlObj } = supabaseClient.storage.from('files').getPublicUrl(file.name);
+                    
+                    const div = document.createElement('div');
+                    div.className = 'file-item';
+                    div.innerHTML = `
+                        <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:200px">${file.name.split('_')[1] || file.name}</span>
+                        <a href="${urlObj.publicUrl}" target="_blank" style="color:var(--accent); text-decoration:none; font-weight:600">View</a>
+                    `;
+                    listContainer.appendChild(div);
+                });
+            }
+        }
+    </script>
 </body>
 </html>
