@@ -1,230 +1,594 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ether Cloud | Magic Login</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        :root {
-            --glass: rgba(255, 255, 255, 0.8);
-            --accent: #6366f1;
-            --text-main: #1e293b;
-        }
+  <!-- ═══════════════════════════════════════════
+       PRIMARY SEO META TAGS
+  ═══════════════════════════════════════════ -->
+  <title>Tasdid Rahman — Greatest Student of All Time (GSAT) | tasdid.pro.bd</title>
+  <meta name="description" content="Tasdid Rahman — officially recognized as the Greatest Student of All Time (GSAT). An extraordinary mind, an unrivaled academic force. Welcome to the official personal website of Tasdid Rahman." />
+  <meta name="keywords" content="Tasdid Rahman, GSAT, Greatest Student of All Time, Tasdid, tasdid.pro.bd, student, Bangladesh, academic excellence" />
+  <meta name="author" content="Tasdid Rahman" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://tasdid.pro.bd/" />
 
-        body {
-            margin: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-main);
-        }
+  <!-- ═══════════════════════════════════════════
+       OPEN GRAPH (FACEBOOK / LINKEDIN)
+  ═══════════════════════════════════════════ -->
+  <meta property="og:type" content="profile" />
+  <meta property="og:title" content="Tasdid Rahman — Greatest Student of All Time (GSAT)" />
+  <meta property="og:description" content="The official home of Tasdid Rahman — GSAT. An extraordinary mind that redefines academic excellence." />
+  <meta property="og:url" content="https://tasdid.pro.bd/" />
+  <meta property="og:site_name" content="Tasdid Rahman | tasdid.pro.bd" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="profile:first_name" content="Tasdid" />
+  <meta property="profile:last_name" content="Rahman" />
 
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 32px;
-            padding: 40px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
+  <!-- ═══════════════════════════════════════════
+       TWITTER / X CARD
+  ═══════════════════════════════════════════ -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Tasdid Rahman — GSAT" />
+  <meta name="twitter:description" content="The official website of Tasdid Rahman, the Greatest Student of All Time." />
+  <meta name="twitter:site" content="@tasdidrahman" />
 
-        h1 { font-weight: 700; font-size: 1.8rem; letter-spacing: -0.5px; margin-bottom: 8px; }
-        p { color: #64748b; margin-bottom: 24px; font-size: 0.9rem; line-height: 1.5; }
+  <!-- ═══════════════════════════════════════════
+       STRUCTURED DATA — JSON-LD (SCHEMA.ORG)
+  ═══════════════════════════════════════════ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Tasdid Rahman",
+    "alternateName": "GSAT",
+    "description": "The Greatest Student of All Time",
+    "url": "https://tasdid.pro.bd/",
+    "sameAs": [],
+    "knowsAbout": ["Academic Excellence", "Education", "Knowledge"],
+    "nationality": {
+      "@type": "Country",
+      "name": "Bangladesh"
+    }
+  }
+  </script>
 
-        /* Input Styling */
-        .input-group { margin-bottom: 16px; text-align: left; }
-        input[type="email"] {
-            width: 100%;
-            padding: 14px 18px;
-            border-radius: 14px;
-            border: 1px solid #cbd5e1;
-            background: white;
-            font-family: inherit;
-            font-size: 1rem;
-            box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        input[type="email"]:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+  <!-- ═══════════════════════════════════════════
+       WEBSITE SCHEMA
+  ═══════════════════════════════════════════ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Tasdid Rahman — GSAT",
+    "url": "https://tasdid.pro.bd/",
+    "description": "Official personal website of Tasdid Rahman, the Greatest Student of All Time.",
+    "author": {
+      "@type": "Person",
+      "name": "Tasdid Rahman"
+    },
+    "creator": {
+      "@type": "Person",
+      "name": "Ahnaf Tahsin"
+    },
+    "mentions": {
+      "@type": "Person",
+      "name": "MD. Hasibul Hasan",
+      "description": "Greatest Programmer of All Time (GPAT)"
+    }
+  }
+  </script>
 
-        .btn {
-            background: #0f172a;
-            color: white;
-            padding: 14px;
-            border-radius: 14px;
-            border: none;
-            font-weight: 600;
-            width: 100%;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.2s;
-        }
-        .btn:hover { background: #1e293b; transform: translateY(-1px); }
-        .btn:active { transform: translateY(0); }
+  <!-- ═══════════════════════════════════════════
+       FONTS
+  ═══════════════════════════════════════════ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
-        /* App UI */
-        #app-ui { display: none; }
-        .upload-area {
-            border: 2px dashed #cbd5e1;
-            padding: 40px 20px;
-            border-radius: 20px;
-            margin: 20px 0;
-            cursor: pointer;
-            background: rgba(255,255,255,0.4);
-        }
-        .file-item {
-            background: white;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-        }
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .status-msg { font-size: 0.85rem; margin-top: 12px; font-weight: 500; }
-        .hidden { display: none; }
-    </style>
+    :root {
+      --ink: #0a0a0a;
+      --paper: #f5f0e8;
+      --gold: #c8a951;
+      --gold-light: #e8d08a;
+      --red: #c0392b;
+      --cream: #faf7f0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--ink);
+      color: var(--paper);
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* ── GRID LINES ── */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,169,81,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,169,81,0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2.5rem;
+      z-index: 100;
+      border-bottom: 1px solid rgba(200,169,81,0.15);
+      backdrop-filter: blur(8px);
+      background: rgba(10,10,10,0.6);
+    }
+
+    .topbar-brand {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .topbar-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: rgba(200,169,81,0.6);
+      border: 1px solid rgba(200,169,81,0.25);
+      padding: 0.3rem 0.8rem;
+      text-transform: uppercase;
+    }
+
+    /* ── HERO SECTION ── */
+    .hero {
+      text-align: center;
+      max-width: 900px;
+      width: 100%;
+      padding: 5rem 1rem 3rem;
+      position: relative;
+    }
+
+    /* animated bracket decorations */
+    .hero::before, .hero::after {
+      content: '[';
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 8rem;
+      color: rgba(200,169,81,0.08);
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      line-height: 1;
+      animation: breathe 4s ease-in-out infinite;
+    }
+    .hero::before { left: -2rem; content: '['; }
+    .hero::after  { right: -2rem; content: ']'; }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0.08; transform: translateY(-50%) scale(1); }
+      50%       { opacity: 0.18; transform: translateY(-50%) scale(1.03); }
+    }
+
+    /* eyebrow label */
+    .eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .eyebrow::before, .eyebrow::after {
+      content: '';
+      display: inline-block;
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+
+    /* the statement */
+    .statement {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.2rem, 7vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--paper);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.4s;
+    }
+
+    .statement .name {
+      color: var(--gold);
+      display: block;
+      font-style: italic;
+      position: relative;
+    }
+
+    /* underline sweep on name */
+    .statement .name::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      animation: sweepLine 1.2s ease forwards 1.2s;
+    }
+    @keyframes sweepLine {
+      to { width: 100%; }
+    }
+
+    /* GSAT badge */
+    .gsat-wrap {
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.7s;
+      margin: 2rem 0;
+    }
+
+    .gsat-badge {
+      display: inline-block;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 12vw, 9rem);
+      letter-spacing: 0.1em;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 40%, #a0722a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+    }
+
+    /* animated shimmer on GSAT */
+    .gsat-badge::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0; top: 0;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: inherit;
+      letter-spacing: inherit;
+      background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.4) 50%, transparent 60%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 200% 200%;
+      animation: shimmer 3s linear infinite;
+    }
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .gsat-sub {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: rgba(200,169,81,0.5);
+      text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+
+    /* divider */
+    .divider {
+      width: 100%;
+      max-width: 400px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(200,169,81,0.4), transparent);
+      margin: 2.5rem auto;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 1s;
+    }
+
+    /* ── CORNER DECORATIONS ── */
+    .corner {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      opacity: 0.3;
+      z-index: 2;
+    }
+    .corner svg { width: 100%; height: 100%; }
+    .corner.tl { top: 1rem; left: 1rem; }
+    .corner.tr { top: 1rem; right: 1rem; transform: scaleX(-1); }
+    .corner.bl { bottom: 1rem; left: 1rem; transform: scaleY(-1); }
+    .corner.br { bottom: 1rem; right: 1rem; transform: scale(-1,-1); }
+
+    /* ── CREDIT BLOCK ── */
+    .credit-block {
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1.2s;
+      text-align: center;
+      max-width: 600px;
+    }
+
+    .credit-inner {
+      border: 1px solid rgba(200,169,81,0.2);
+      padding: 1.4rem 2rem;
+      position: relative;
+      background: rgba(200,169,81,0.03);
+    }
+
+    .credit-inner::before {
+      content: '◆';
+      position: absolute;
+      top: -0.6rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--ink);
+      padding: 0 0.5rem;
+      color: var(--gold);
+      font-size: 0.7rem;
+    }
+
+    .credit-line {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: rgba(245,240,232,0.45);
+      line-height: 1.8;
+    }
+
+    .credit-line .highlight {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .credit-line .highlight-2 {
+      color: rgba(200,169,81,0.75);
+    }
+
+    /* ── PULSE DOT ── */
+    .pulse-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      margin: 0 6px;
+      vertical-align: middle;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(200,169,81,0.6); }
+      50%       { box-shadow: 0 0 0 6px rgba(200,169,81,0); }
+    }
+
+    /* ── URL CHIP ── */
+    .url-chip {
+      margin-top: 0.8rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: rgba(200,169,81,0.35);
+    }
+
+    /* ── SCROLL INDICATOR ── */
+    .scroll-hint {
+      position: fixed;
+      bottom: 1.8rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      color: rgba(200,169,81,0.3);
+      text-transform: uppercase;
+      animation: fadeIn 1s ease forwards 2s, bobble 2s ease-in-out infinite 2.5s;
+      opacity: 0;
+      z-index: 10;
+    }
+    @keyframes bobble {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(5px); }
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .topbar { padding: 1rem 1.2rem; }
+      .hero::before, .hero::after { display: none; }
+      .credit-inner { padding: 1rem 1.2rem; }
+    }
+  </style>
 </head>
+
 <body>
 
-    <div class="glass-card">
-        <div id="auth-ui">
-            <h1>Ether Cloud</h1>
-            <p>Enter your email. We'll send a magic link to your inbox—no password required.</p>
-            
-            <div class="input-group">
-                <input type="email" id="email" placeholder="name@example.com">
-            </div>
-            <button class="btn" id="magicLinkBtn" onclick="sendMagicLink()">Send Magic Link</button>
-            <div id="authStatus" class="status-msg"></div>
+  <!-- Accessibility skip link -->
+  <a href="#main-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to main content</a>
+
+  <!-- Grid background -->
+  <div class="grid-bg" aria-hidden="true"></div>
+
+  <!-- Corner ornaments -->
+  <div class="corner tl" aria-hidden="true">
+    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 60 L0 0 L60 0" stroke="#c8a951" stroke-width="1.5" fill="none"/>
+      <path d="M8 52 L8 8 L52 8" stroke="#c8a951" stroke-width="0.5" fill="none" stroke-dasharray="3 4"/>
+    </svg>
+  </div>
+  <div class="corner tr" aria-hidden="true">
+    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 60 L0 0 L60 0" stroke="#c8a951" stroke-width="1.5" fill="none"/>
+      <path d="M8 52 L8 8 L52 8" stroke="#c8a951" stroke-width="0.5" fill="none" stroke-dasharray="3 4"/>
+    </svg>
+  </div>
+  <div class="corner bl" aria-hidden="true">
+    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 60 L0 0 L60 0" stroke="#c8a951" stroke-width="1.5" fill="none"/>
+      <path d="M8 52 L8 8 L52 8" stroke="#c8a951" stroke-width="0.5" fill="none" stroke-dasharray="3 4"/>
+    </svg>
+  </div>
+  <div class="corner br" aria-hidden="true">
+    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 60 L0 0 L60 0" stroke="#c8a951" stroke-width="1.5" fill="none"/>
+      <path d="M8 52 L8 8 L52 8" stroke="#c8a951" stroke-width="0.5" fill="none" stroke-dasharray="3 4"/>
+    </svg>
+  </div>
+
+  <!-- Top bar -->
+  <header role="banner">
+    <nav class="topbar" aria-label="Site header">
+      <span class="topbar-brand">tasdid.pro.bd</span>
+      <span class="topbar-badge" aria-label="Greatest Student of All Time">G · S · A · T</span>
+    </nav>
+  </header>
+
+  <!-- Main content -->
+  <main id="main-content" aria-label="Main content">
+    <article class="hero" itemscope itemtype="https://schema.org/Person">
+      <meta itemprop="name" content="Tasdid Rahman" />
+      <meta itemprop="description" content="Greatest Student of All Time" />
+
+      <p class="eyebrow" aria-label="Official statement">
+        Official Statement
+      </p>
+
+      <h1 class="statement">
+        I am
+        <span class="name" itemprop="name">Tasdid Rahman</span>
+        the greatest student
+        of all time!!
+      </h1>
+
+      <div class="gsat-wrap" role="img" aria-label="GSAT — Greatest Student of All Time">
+        <div class="gsat-badge" data-text="(GSAT)">(GSAT)</div>
+        <p class="gsat-sub">Greatest Student of All Time</p>
+      </div>
+
+      <div class="divider" role="separator" aria-hidden="true"></div>
+
+      <!-- Credit block -->
+      <footer class="credit-block" role="contentinfo" aria-label="Credits">
+        <div class="credit-inner">
+          <p class="credit-line">
+            Made by <span class="highlight">Ahnaf Tahsin</span>
+          </p>
+          <p class="credit-line" style="margin-top:0.4rem;">
+            <span aria-hidden="true"><span class="pulse-dot"></span></span>
+            Inspired by
+            <span class="highlight-2">MD. Hasibul Hasan</span>
+            — The Greatest Programmer of All Time
+            <strong class="highlight">(GPAT)</strong>
+          </p>
+          <p class="url-chip" aria-label="Domain">tasdid.pro.bd</p>
         </div>
+      </footer>
 
-        <div id="app-ui">
-            <h1>Welcome back</h1>
-            <p id="user-display" style="margin-bottom: 10px; font-weight: 600;"></p>
-            
-            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                <span id="upload-status">Drop file or click to upload</span>
-                <input type="file" id="fileInput" class="hidden" onchange="uploadFile(event)">
-            </div>
+    </article>
+  </main>
 
-            <div id="file-list"></div>
-            
-            <button class="btn" style="background:none; color:#ef4444; margin-top:20px; border: 1px solid #fee2e2" onclick="signOut()">Log Out</button>
-        </div>
-    </div>
+  <p class="scroll-hint" aria-hidden="true">▼ &nbsp; tasdid.pro.bd</p>
 
-    <script>
-        // REPLACE THESE WITH YOUR KEYS FROM SUPABASE SETTINGS > API
-        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-        const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
-        
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  <!-- ══════════════════════════════════
+       PARTICLE ANIMATION (subtle stars)
+  ══════════════════════════════════ -->
+  <canvas id="particles" style="position:fixed;inset:0;z-index:0;pointer-events:none;" aria-hidden="true"></canvas>
 
-        // --- MAGIC LINK LOGIC ---
-        async function sendMagicLink() {
-            const email = document.getElementById('email').value;
-            const btn = document.getElementById('magicLinkBtn');
-            const status = document.getElementById('authStatus');
+  <script>
+    (function() {
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+      let W, H, dots = [];
 
-            if (!email) return alert("Please enter your email");
+      function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
 
-            btn.disabled = true;
-            btn.innerText = "Sending...";
-
-            const { error } = await supabaseClient.auth.signInWithOtp({
-                email: email,
-                options: {
-                    emailRedirectTo: window.location.href, // Sends user back to this exact page
-                },
-            });
-
-            if (error) {
-                status.style.color = "#ef4444";
-                status.innerText = error.message;
-                btn.disabled = false;
-                btn.innerText = "Send Magic Link";
-            } else {
-                status.style.color = "#059669";
-                status.innerText = "Check your email for the login link!";
-            }
+      function spawn() {
+        dots = [];
+        const count = Math.floor((W * H) / 18000);
+        for (let i = 0; i < count; i++) {
+          dots.push({
+            x: Math.random() * W,
+            y: Math.random() * H,
+            r: Math.random() * 1.2 + 0.3,
+            a: Math.random(),
+            speed: Math.random() * 0.3 + 0.05,
+            dir: Math.random() * Math.PI * 2
+          });
         }
+      }
 
-        // --- AUTH STATE TRACKER ---
-        supabaseClient.auth.onAuthStateChange((event, session) => {
-            if (session) {
-                document.getElementById('auth-ui').style.display = 'none';
-                document.getElementById('app-ui').style.display = 'block';
-                document.getElementById('user-display').innerText = session.user.email;
-                loadFiles();
-            }
-        });
-
-        async function signOut() {
-            await supabaseClient.auth.signOut();
-            window.location.reload();
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        for (const d of dots) {
+          ctx.beginPath();
+          ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(200,169,81,${d.a * 0.4})`;
+          ctx.fill();
+          d.x += Math.cos(d.dir) * d.speed;
+          d.y += Math.sin(d.dir) * d.speed;
+          if (d.x < 0) d.x = W;
+          if (d.x > W) d.x = 0;
+          if (d.y < 0) d.y = H;
+          if (d.y > H) d.y = 0;
         }
+        requestAnimationFrame(draw);
+      }
 
-        // --- STORAGE LOGIC ---
-        async function uploadFile(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+      window.addEventListener('resize', () => { resize(); spawn(); });
+      resize();
+      spawn();
+      draw();
+    })();
+  </script>
 
-            const status = document.getElementById('upload-status');
-            status.innerText = "Uploading...";
-
-            // Uploading to the 'files' bucket
-            const { data, error } = await supabaseClient.storage
-                .from('files')
-                .upload(`${Date.now()}_${file.name}`, file);
-
-            if (error) {
-                alert("Upload failed: " + error.message);
-                status.innerText = "Drop file or click to upload";
-            } else {
-                status.innerText = "Upload Complete!";
-                setTimeout(() => {
-                    status.innerText = "Drop file or click to upload";
-                    loadFiles();
-                }, 2000);
-            }
-        }
-
-        async function loadFiles() {
-            const listContainer = document.getElementById('file-list');
-            listContainer.innerHTML = '<p style="font-size:0.8rem">Loading files...</p>';
-
-            const { data, error } = await supabaseClient.storage.from('files').list('', {
-                limit: 10,
-                offset: 0,
-                sortBy: { column: 'created_at', order: 'desc' },
-            });
-
-            if (data) {
-                listContainer.innerHTML = '';
-                data.forEach(file => {
-                    const { data: urlObj } = supabaseClient.storage.from('files').getPublicUrl(file.name);
-                    
-                    const div = document.createElement('div');
-                    div.className = 'file-item';
-                    div.innerHTML = `
-                        <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:200px">${file.name.split('_')[1] || file.name}</span>
-                        <a href="${urlObj.publicUrl}" target="_blank" style="color:var(--accent); text-decoration:none; font-weight:600">View</a>
-                    `;
-                    listContainer.appendChild(div);
-                });
-            }
-        }
-    </script>
 </body>
 </html>
